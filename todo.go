@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 	"path"
+
+	"github.com/ryanuber/columnize"
 )
 
 type Todo struct {
@@ -74,13 +76,19 @@ func (todo *Todo) list() {
 }
 
 func (todo *Todo) writeToFile() {
-	content := ""
-
-	for i, todoItem := range todo.items {
-		content += fmt.Sprintf("%d %s %s", (i + 1), "[ ]", todoItem.title)
+	content := []string{
+		"ID|Status|Title",
 	}
 
-	_, err := todo.file.WriteString(content)
+	for i, todoItem := range todo.items {
+		if todoItem.done {
+			content = append(content, fmt.Sprintf("%d|%s|%s", (i+1), "Done", todoItem.title))
+		} else {
+			content = append(content, fmt.Sprintf("%d|%s|%s", (i+1), "Undone", todoItem.title))
+		}
+	}
+
+	_, err := todo.file.WriteString(fmt.Sprintf("%s\n", columnize.SimpleFormat(content)))
 
 	if err != nil {
 		log.Fatal(err)

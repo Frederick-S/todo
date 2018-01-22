@@ -1,6 +1,7 @@
 package main
 
 type TodoItem struct {
-	done  bool
-	title string
+	ID    int    `json:"id"`
+	Done  bool   `json:"done"`
+	Title string `json:"title"`
 }

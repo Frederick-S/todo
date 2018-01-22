@@ -34,6 +34,10 @@ func main() {
 		todo.add(title)
 
 		break
+	case "list":
+		todo.list()
+
+		break
 	default:
 		log.Fatal(fmt.Sprintf("Unknown command %s", command))
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -40,15 +41,17 @@ func newTodo(storagePath string) *Todo {
 }
 
 func (todo *Todo) getStorageFilePath() string {
-	return path.Join(todo.storagePath, "todo.db")
+	return path.Join(todo.storagePath, "todo.json")
 }
 
 func (todo *Todo) parse() {
 	todo.items = []TodoItem{}
+
+	//data, err := ioutil.ReadFile(todo.getStorageFilePath())
 }
 
 func (todo *Todo) add(title string) {
-	todoItem := TodoItem{done: false, title: title}
+	todoItem := TodoItem{Done: false, Title: title}
 
 	todo.items = append(todo.items, todoItem)
 
@@ -72,23 +75,29 @@ func (todo *Todo) clear() {
 }
 
 func (todo *Todo) list() {
-
-}
-
-func (todo *Todo) writeToFile() {
 	content := []string{
 		"ID|Status|Title",
 	}
 
 	for i, todoItem := range todo.items {
-		if todoItem.done {
-			content = append(content, fmt.Sprintf("%d|%s|%s", (i+1), "Done", todoItem.title))
+		if todoItem.Done {
+			content = append(content, fmt.Sprintf("%d|%s|%s", (i+1), "Done", todoItem.Title))
 		} else {
-			content = append(content, fmt.Sprintf("%d|%s|%s", (i+1), "Undone", todoItem.title))
+			content = append(content, fmt.Sprintf("%d|%s|%s", (i+1), "Undone", todoItem.Title))
 		}
 	}
 
-	_, err := todo.file.WriteString(fmt.Sprintf("%s\n", columnize.SimpleFormat(content)))
+	fmt.Printf("%s\n", columnize.SimpleFormat(content))
+}
+
+func (todo *Todo) writeToFile() {
+	content, err := json.Marshal(todo.items)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = todo.file.WriteString(string(content))
 
 	if err != nil {
 		log.Fatal(err)

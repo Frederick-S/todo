@@ -73,11 +73,25 @@ func (todo *Todo) undone(id int) {
 }
 
 func (todo *Todo) delete(id int) {
+	if id >= 0 && id < len(todo.items) {
+		todoItems := []TodoItem{}
 
+		for i, todoItem := range todo.items {
+			if i != id-1 {
+				todoItems = append(todoItems, todoItem)
+			}
+		}
+
+		todo.items = todoItems
+
+		todo.writeToFile()
+	}
 }
 
 func (todo *Todo) clear() {
+	todo.items = []TodoItem{}
 
+	todo.writeToFile()
 }
 
 func (todo *Todo) list() {

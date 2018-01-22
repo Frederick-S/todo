@@ -49,6 +49,20 @@ func main() {
 		todo.done(id)
 
 		break
+	case "undone":
+		if len(arguments) < 2 {
+			log.Fatal("Missing todo id")
+		}
+
+		id, err := strconv.Atoi(arguments[1])
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		todo.undone(id)
+
+		break
 	case "list":
 		todo.list()
 

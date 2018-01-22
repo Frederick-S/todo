@@ -65,7 +65,11 @@ func (todo *Todo) done(id int) {
 }
 
 func (todo *Todo) undone(id int) {
+	if id >= 0 && id < len(todo.items) {
+		todo.items[id-1].Done = false
 
+		todo.writeToFile()
+	}
 }
 
 func (todo *Todo) delete(id int) {

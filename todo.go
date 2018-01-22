@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path"
@@ -47,7 +48,13 @@ func (todo *Todo) getStorageFilePath() string {
 func (todo *Todo) parse() {
 	todo.items = []TodoItem{}
 
-	//data, err := ioutil.ReadFile(todo.getStorageFilePath())
+	data, err := ioutil.ReadFile(todo.getStorageFilePath())
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	json.Unmarshal(data, &todo.items)
 }
 
 func (todo *Todo) add(title string) {

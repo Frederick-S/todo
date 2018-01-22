@@ -21,6 +21,12 @@ func getHomeFolder() string {
 func main() {
 	todo := newTodo(getHomeFolder())
 
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: todo add|done|undone|delete|clear|list")
+
+		return
+	}
+
 	arguments := os.Args[1:]
 	command := arguments[0]
 

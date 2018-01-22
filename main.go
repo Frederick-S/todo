@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/user"
+	"strconv"
 )
 
 func getHomeFolder() string {
@@ -32,6 +33,20 @@ func main() {
 		title := arguments[1]
 
 		todo.add(title)
+
+		break
+	case "done":
+		if len(arguments) < 2 {
+			log.Fatal("Missing todo id")
+		}
+
+		id, err := strconv.Atoi(arguments[1])
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		todo.done(id)
 
 		break
 	case "list":

@@ -13,7 +13,6 @@ import (
 
 type Todo struct {
 	storagePath string
-	file        *os.File
 	items       []TodoItem
 }
 
@@ -27,14 +26,6 @@ func newTodo(storagePath string) *Todo {
 			log.Fatal(err)
 		}
 	}
-
-	file, err := os.OpenFile(todo.getStorageFilePath(), os.O_WRONLY, os.ModeAppend)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	todo.file = file
 
 	todo.parse()
 
@@ -65,15 +56,19 @@ func (todo *Todo) add(title string) {
 	todo.writeToFile()
 }
 
-func (todo *Todo) done(id int32) {
+func (todo *Todo) done(id int) {
+	if id >= 0 && id < len(todo.items) {
+		todo.items[id-1].Done = true
+
+		todo.writeToFile()
+	}
+}
+
+func (todo *Todo) undone(id int) {
 
 }
 
-func (todo *Todo) undone(id int32) {
-
-}
-
-func (todo *Todo) delete(id int32) {
+func (todo *Todo) delete(id int) {
 
 }
 
@@ -104,7 +99,7 @@ func (todo *Todo) writeToFile() {
 		log.Fatal(err)
 	}
 
-	_, err = todo.file.WriteString(string(content))
+	err = ioutil.WriteFile(todo.getStorageFilePath(), content, 0644)
 
 	if err != nil {
 		log.Fatal(err)

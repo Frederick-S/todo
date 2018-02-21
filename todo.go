@@ -57,7 +57,7 @@ func (todo *Todo) add(title string) {
 }
 
 func (todo *Todo) done(id int) {
-	if id >= 0 && id < len(todo.items) {
+	if id >= 1 && id <= len(todo.items) {
 		todo.items[id-1].Done = true
 
 		todo.writeToFile()
@@ -65,7 +65,7 @@ func (todo *Todo) done(id int) {
 }
 
 func (todo *Todo) undone(id int) {
-	if id >= 0 && id < len(todo.items) {
+	if id >= 1 && id <= len(todo.items) {
 		todo.items[id-1].Done = false
 
 		todo.writeToFile()
@@ -73,7 +73,7 @@ func (todo *Todo) undone(id int) {
 }
 
 func (todo *Todo) delete(id int) {
-	if id >= 0 && id < len(todo.items) {
+	if id >= 1 && id <= len(todo.items) {
 		todoItems := []TodoItem{}
 
 		for i, todoItem := range todo.items {
